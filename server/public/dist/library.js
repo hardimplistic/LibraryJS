@@ -276,6 +276,8 @@ function WGetCall(url, parameter, callback, defaultReturn) {
     WAjaxCall(ajaxOptions, callback, defaultReturn);
 }
 
+/** Promise AjaxCall */
+
 function PAjaxCall(ajaxOptions, resolve, reject) {
     $.ajax(ajaxOptions)
         .done(function(data, textStatus, jqXHR) {
@@ -328,7 +330,6 @@ function PAjaxCall(ajaxOptions, resolve, reject) {
         });
 }
 
-/** Promise AjaxCall */
 function PJsonCall(url, parameter) {
     return new Promise(function(resolve, reject) {
         var ajaxOptions = {
@@ -349,6 +350,20 @@ function PPostJsonCall(url, parameter) {
 
 function PBodyCall(url, parameter) {
     PJsonCall(url, parameter);
+}
+
+function PDeleteJsonCall(url, parameter) {
+    return new Promise(function(resolve, reject) {
+        var ajaxOptions = {
+            type: "DELETE",
+            url: url,
+            data: $.toJSON(parameter),
+            dataType: "json",
+            contentType : 'application/json;charset=utf-8',
+            timeout: WConfig.ajax.timeout
+        };
+        PAjaxCall(ajaxOptions, resolve, reject);
+    });
 }
 
 function PPostCall(url, parameter) {
