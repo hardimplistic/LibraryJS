@@ -166,7 +166,6 @@ function WGetCall(url, parameter, callback, defaultReturn) {
     WAjaxCall(ajaxOptions, callback, defaultReturn);
 }
 
-
 function PAjaxCall(ajaxOptions, resolve, reject) {
     $.ajax(ajaxOptions)
         .done(function(data, textStatus, jqXHR) {
@@ -219,6 +218,7 @@ function PAjaxCall(ajaxOptions, resolve, reject) {
         });
 }
 
+/** Promise AjaxCall */
 function PJsonCall(url, parameter) {
     return new Promise(function(resolve, reject) {
         var ajaxOptions = {
@@ -233,26 +233,50 @@ function PJsonCall(url, parameter) {
     });
 }
 
-
-
-function PPostCall(url, parameter, callback, defaultReturn) {
-    var ajaxOptions = {
-        type: "POST",
-        url: url,
-        data: parameter,
-        timeout: WConfig.ajax.timeout
-    };
-    WAjaxCall(ajaxOptions, callback, defaultReturn);
+function PPostJsonCall(url, parameter) {
+    PJsonCall(url, parameter);
 }
 
-function PGetCall(url, parameter, callback, defaultReturn) {
-    var ajaxOptions = {
-        type: "GET",
-        url: url,
-        data: parameter,
-        timeout: WConfig.ajax.timeout
-    };
-    WAjaxCall(ajaxOptions, callback, defaultReturn);
+function PBodyCall(url, parameter) {
+    PJsonCall(url, parameter);
+}
+
+function PPostCall(url, parameter) {
+    return new Promise(function(resolve, reject) {
+        var ajaxOptions = {
+            type: "POST",
+            url: url,
+            data: parameter,
+            timeout: WConfig.ajax.timeout
+        };
+        PAjaxCall(ajaxOptions, resolve, reject);
+    });
+}
+
+function PGetCall(url, parameter) {
+    return new Promise(function(resolve, reject) {
+        var ajaxOptions = {
+            type: "GET",
+            url: url,
+            data: parameter,
+            timeout: WConfig.ajax.timeout
+        };
+        PAjaxCall(ajaxOptions, resolve, reject);
+    });
+}
+
+function PPutJsonCall(url, parameter) {
+    return new Promise(function(resolve, reject) {
+        var ajaxOptions = {
+            type: "PUT",
+            url: url,
+            data: $.toJSON(parameter),
+            dataType: "json",
+            contentType : 'application/json;charset=utf-8',
+            timeout: WConfig.ajax.timeout
+        };
+        PAjaxCall(ajaxOptions, resolve, reject);
+    });
 }
 
 
