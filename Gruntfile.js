@@ -46,10 +46,18 @@ module.exports = function (grunt) {
                     'dist/library.dependencies.min.js': ['dist/library.js']
                 }
             }
-        }
+        },
+        copy: {
+            main: {
+                files: [
+                    {expand: true, src: ['dist/*'], dest: 'server/public/', filter: 'isFile'},
+                ],
+            },
+        },
 
     });
     grunt.loadNpmTasks('grunt-contrib-concat');
     grunt.loadNpmTasks('grunt-contrib-uglify');
-    grunt.registerTask('default', ['concat', 'uglify']);
+    grunt.loadNpmTasks('grunt-contrib-copy');
+    grunt.registerTask('default', ['concat', 'uglify', 'copy']);
 };

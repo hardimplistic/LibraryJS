@@ -167,6 +167,76 @@ function WGetCall(url, parameter, callback, defaultReturn) {
 }
 
 
-function PAjaxCall(ajaxOptions, then) {
+function PAjaxCall(ajaxOptions, resolve, reject) {
+    $.ajax(ajaxOptions)
+        .done(function(data, textStatus, jqXHR) {
+            // 超时处理
+            if (textStatus == 'timeout') {
+                reject({
+                    textStatus: textStatus,
+                    jqXHR: jqXHR,
+                    errorThrown: null
+                });
+                return;
+            }
 
+            // 判断状态码
+            if (data.status == WConfig.ajax.loginStatus) {
+                // 去登录
+                return;
+            }
+
+            // 正确执行
+            if (data.status == 200) {
+                resolve(data);
+            }
+        })
+        .fail(function( jqXHR, textStatus, errorThrown) {
+            reject({
+                textStatus: textStatus,
+                jqXHR: jqXHR,
+                errorThrown: errorThrown
+            });
+        });
 }
+
+function PJsonCall(url, parameter) {
+    return new Promise(function(resolve, reject) {
+        var ajaxOptions = {
+            type: "POST",
+            url: url,
+            data: $.toJSON(parameter),
+            dataType: "json",
+            contentType : 'application/json;charset=utf-8',
+            timeout: WConfig.ajax.timeout
+        };
+        PAjaxCall(ajaxOptions, resolve, reject);
+    });
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

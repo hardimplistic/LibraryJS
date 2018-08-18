@@ -1,4 +1,4 @@
-AssertJS = {
+var AssertJS = {
     active: false,
     Utils: {
         isDebugModeInSearchQuery: function() {
