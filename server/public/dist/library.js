@@ -126,7 +126,7 @@ var WConfig = {
     ajax: {
         timeout: 500000,        // 超时
         loginStatus: 80403,     // 需要登录
-        loginUrl: '/index.html' // 登录地址
+        loginUrl: '/login.html' // 登录地址
     }
 };
 
@@ -283,26 +283,45 @@ function PAjaxCall(ajaxOptions, resolve, reject) {
             // 超时处理
             if (textStatus == 'timeout') {
                 reject({
+                    response: null,
                     textStatus: textStatus,
                     jqXHR: jqXHR,
                     errorThrown: null
                 });
-                return;
             }
 
             // 判断状态码
-            if (data.status == WConfig.ajax.loginStatus) {
+            else if (data.status == WConfig.ajax.loginStatus) {
                 // 去登录
-                return;
+                location.href = WConfig.ajax.loginUrl;
+            }
+
+            else if (data.status != 200) {
+                reject({
+                    response: data,
+                    textStatus: textStatus,
+                    jqXHR: jqXHR,
+                    errorThrown: data.message
+                });
             }
 
             // 正确执行
-            if (data.status == 200) {
+            else if (data.status == 200) {
                 resolve(data);
+            }
+
+            else {
+                reject({
+                    response: data,
+                    textStatus: textStatus,
+                    jqXHR: jqXHR,
+                    errorThrown: null
+                });
             }
         })
         .fail(function( jqXHR, textStatus, errorThrown) {
             reject({
+                response: null,
                 textStatus: textStatus,
                 jqXHR: jqXHR,
                 errorThrown: errorThrown
