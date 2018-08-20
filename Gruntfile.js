@@ -15,7 +15,7 @@ module.exports = function (grunt) {
                         src.replace(/(^|\n)[ \t]*('use strict'|"use strict");?\s*/g, '$1');
                 }
             },
-            distconcat: {
+            dist: {
                 files: {
                     'dist/library.dependencies.js': [
                         'dependencies/jquery.json.js',
@@ -40,7 +40,7 @@ module.exports = function (grunt) {
             }
         },
         uglify: {
-            distuglify: {
+            dist: {
                 files: {
                     'dist/library.min.js': ['dist/library.js'],
                     'dist/library.dependencies.min.js': ['dist/library.js']
@@ -48,16 +48,38 @@ module.exports = function (grunt) {
             }
         },
         copy: {
-            main: {
+            test: {
                 files: [
                     {expand: true, src: ['dist/*'], dest: 'server/public/', filter: 'isFile'},
-                ],
-            },
+                ]
+            }
         },
+
+        jshint: {
+            options: {
+                browser: true,
+                devel: true
+            },
+            all: [
+                // 'src/library.polyfill.js',
+                'src/library.common.js',
+                'src/library.network.js',
+                'src/library.form.js',
+                'src/library.storage.js',
+                'src/library.chain.js',
+                'src/library.asyncqueue.js',
+                'src/library.data.js',
+                'src/library.uuid.js',
+                'src/library.hashcode.js',
+                // 'src/library.assert.js',
+            ]
+        }
 
     });
     grunt.loadNpmTasks('grunt-contrib-concat');
     grunt.loadNpmTasks('grunt-contrib-uglify');
     grunt.loadNpmTasks('grunt-contrib-copy');
-    grunt.registerTask('default', ['concat', 'uglify', 'copy']);
+    grunt.loadNpmTasks('grunt-contrib-jshint');
+    grunt.registerTask('default', ['concat:dist', 'uglify:dist', 'copy:test']);
+    grunt.registerTask('jshintc', ['jshint']);
 };
