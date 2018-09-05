@@ -12,6 +12,18 @@ function getSearchParameter(key) {
     }
 }
 
+function getHashParameter(key) {
+    if (location.hash && location.hash.substring(1)) {
+        var arr, reg = new RegExp("(^|&)" + key + "=([^&]*)(&|$)");
+        if (arr = location.hash.substring(1).match(reg))
+            return unescape(arr[2]);
+        else
+            return null;
+    } else {
+        return null;
+    }
+}
+
 var WConfig = {
     ajax: {
         timeout: 500000,        // 超时

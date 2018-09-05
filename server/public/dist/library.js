@@ -1,4 +1,4 @@
-/*! LibraryJS - v0.0.1 - 2018-08-20 */
+/*! LibraryJS - v0.0.1 - 2018-09-05 */
 /*! https://github.com/hardimplistic */
 'use strict';
 
@@ -110,7 +110,54 @@ function isNull(str) {
     return str == null || str.value == "";
 }
 
+// https://developer.mozilla.org/en-US/docs/Web/API/URL
+// /en-US/docs/Web/API/URL
+// ../en-US/docs/Web/API/URL
+// en-US/docs/Web/API/URL
+// en-US/docs/Web/API/URL?key=value#hash
+function getLocationRedirect(path) {
+    if (path.startsWith('http://')
+        || path.startsWith('https://')
+        || path.startsWith('file://')) {
+        return path;
+    }
 
+    var href = [];
+    href.push(location.protocol);
+    href.push('//');
+    href.push(location.host);
+    if (!path) {
+        href.push(location.pathname);
+    } else if (path.startsWith('/')) {
+        href.push(path);
+    } else if (location.pathname.endsWith('/')) {
+        href.push(location.pathname);
+        href.push(path);
+    } else {
+        href.push(location.pathname);
+        if (!location.pathname.endsWith('/')) {
+            href.push('/');
+        }
+        href.push('../');
+        href.push(path);
+    }
+    var url = new URL(href.join(''));
+    return url.href;
+}
+function LocationRedirect(path, _debugger) {
+    var url = getLocationRedirect(path);
+    if (_debugger) {
+        this._debugger = _debugger;
+    }
+    if (this._debugger) {
+        if (confirm('Location Redirect: ' + url)) {
+            location.href = url;
+        }
+    } else {
+        location.href = url;
+    }
+}
+LocationRedirect.prototype._debugger = false;
 
 
 // Source: src/library.network.js
@@ -120,6 +167,18 @@ function getSearchParameter(key) {
     if (location.search && location.search.substring(1)) {
         var arr, reg = new RegExp("(^|&)" + key + "=([^&]*)(&|$)");
         if (arr = location.search.substring(1).match(reg))
+            return unescape(arr[2]);
+        else
+            return null;
+    } else {
+        return null;
+    }
+}
+
+function getHashParameter(key) {
+    if (location.hash && location.hash.substring(1)) {
+        var arr, reg = new RegExp("(^|&)" + key + "=([^&]*)(&|$)");
+        if (arr = location.hash.substring(1).match(reg))
             return unescape(arr[2]);
         else
             return null;
