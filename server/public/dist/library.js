@@ -1,4 +1,4 @@
-/*! LibraryJS - v0.0.1 - 2018-09-05 */
+/*! LibraryJS - v0.0.1 - 2018-09-12 */
 /*! https://github.com/hardimplistic */
 'use strict';
 
@@ -100,6 +100,44 @@ if (!Date.prototype.format) {
         for (var k in o)
             if (new RegExp("(" + k + ")").test(fmt)) fmt = fmt.replace(RegExp.$1, (RegExp.$1.length == 1) ? (o[k]) : (("00" + o[k]).substr(("" + o[k]).length)));
         return fmt;
+    };
+}
+
+if (!String.prototype.toInteger) {
+    String.prototype.toInteger = function() {
+        var args = arguments;
+        var value = this.replace(/\s/g, '').replace(/,/g, '');
+        if (value != '' && isNaN(value) == false) {
+            return parseInt(value, 10);
+        }
+        return 0;
+    };
+}
+
+if (!String.prototype.toFloat) {
+    String.prototype.toFloat = function() {
+        var args = arguments;
+        var value = this.replace(/\s/g, '').replace(/,/g, '');
+        if (value != '' && isNaN(value) == false) {
+            return parseFloat(value, 10);
+        }
+        return 0.0;
+    };
+}
+
+if (!String.prototype.toBoolean) {
+    String.prototype.toBoolean = function() {
+        var args = arguments;
+        if (this == 'true') {
+            return true;
+        }
+        return false;
+    };
+}
+
+if (!String.prototype.toHashCode) {
+    String.prototype.toHashCode = function() {
+        return javaHashCode(this);
     };
 }
 
@@ -610,6 +648,38 @@ var WStorage = {
         localStorage.removeItem(key)
     }
 };
+
+var WCookie = {
+    setItem: function(key, valueObject) {
+        var type = $.type(valueObject);
+        switch (type) {
+            case 'object':
+            case 'array':
+                localStorage.setItem('_type_c_' + key, type);
+                $.cookie(key, $.toJSON(valueObject), {path: '/'});
+                break;
+            default:
+                localStorage.setItem('_type_c_' + key, type);
+                $.cookie(key, valueObject, {path: '/'});
+        }
+    },
+    getItem: function(key) {
+        var type = localStorage.getItem('_type_c_' + key);
+        var valueObject = localStorage.getItem(key);
+        switch (type) {
+            case 'object':
+            case 'array':
+                valueObject = $.parseJSON($.cookie(key));
+            default:
+                return valueObject;
+        }
+    },
+    removeItem: function(key) {
+        localStorage.removeItem('_type_c_' + key);
+        localStorage.removeItem(key)
+    }
+};
+
 // Source: src/library.chain.js
 
 // 链条工具类

@@ -19,6 +19,8 @@ module.exports = function (grunt) {
                 files: {
                     'dist/library.dependencies.js': [
                         'dependencies/jquery.json.js',
+                        'dependencies/jquery.base64.js',
+                        'dependencies/jquery.cookie.js',
                         'dependencies/moment.js',
                         'dependencies/moment-with-locales.js',
                         'dependencies/md5.js',

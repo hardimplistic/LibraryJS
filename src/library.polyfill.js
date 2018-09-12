@@ -97,4 +97,42 @@ if (!Date.prototype.format) {
     };
 }
 
+if (!String.prototype.toInteger) {
+    String.prototype.toInteger = function() {
+        var args = arguments;
+        var value = this.replace(/\s/g, '').replace(/,/g, '');
+        if (value != '' && isNaN(value) == false) {
+            return parseInt(value, 10);
+        }
+        return 0;
+    };
+}
+
+if (!String.prototype.toFloat) {
+    String.prototype.toFloat = function() {
+        var args = arguments;
+        var value = this.replace(/\s/g, '').replace(/,/g, '');
+        if (value != '' && isNaN(value) == false) {
+            return parseFloat(value, 10);
+        }
+        return 0.0;
+    };
+}
+
+if (!String.prototype.toBoolean) {
+    String.prototype.toBoolean = function() {
+        var args = arguments;
+        if (this == 'true') {
+            return true;
+        }
+        return false;
+    };
+}
+
+if (!String.prototype.toHashCode) {
+    String.prototype.toHashCode = function() {
+        return javaHashCode(this);
+    };
+}
+
 /** Polyfill End */
