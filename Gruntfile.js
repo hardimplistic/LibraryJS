@@ -24,6 +24,7 @@ module.exports = function (grunt) {
                         'dependencies/moment.js',
                         'dependencies/moment-with-locales.js',
                         'dependencies/md5.js',
+                        'dependencies/polyfill.promise.js',
                     ],
                     'dist/library.js': [
                         'src/library.polyfill.js',
