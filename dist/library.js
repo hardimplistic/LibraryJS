@@ -381,6 +381,14 @@ function WGetCall(url, parameter, callback, defaultReturn) {
 
 /** Promise AjaxCall */
 
+var PConfig = {
+    ajax: {
+        timeout: 500000,        // 超时
+        loginStatus: 80403,     // 需要登录
+        loginUrl: '/login.html' // 登录地址
+    }
+};
+
 function PAjaxCall(ajaxOptions, resolve, reject) {
     $.ajax(ajaxOptions)
         .done(function(data, textStatus, jqXHR) {
@@ -395,9 +403,9 @@ function PAjaxCall(ajaxOptions, resolve, reject) {
             }
 
             // 判断状态码
-            else if (data.status == WConfig.ajax.loginStatus) {
+            else if (data.status == PConfig.ajax.loginStatus) {
                 // 去登录
-                location.href = WConfig.ajax.loginUrl;
+                location.href = PConfig.ajax.loginUrl;
             }
 
             else if (data.status != 200) {
@@ -441,7 +449,7 @@ function PJsonCall(url, parameter) {
             data: $.toJSON(parameter),
             dataType: "json",
             contentType : 'application/json;charset=utf-8',
-            timeout: WConfig.ajax.timeout
+            timeout: PConfig.ajax.timeout
         };
         PAjaxCall(ajaxOptions, resolve, reject);
     });
@@ -463,7 +471,7 @@ function PDeleteJsonCall(url, parameter) {
             data: $.toJSON(parameter),
             dataType: "json",
             contentType : 'application/json;charset=utf-8',
-            timeout: WConfig.ajax.timeout
+            timeout: PConfig.ajax.timeout
         };
         PAjaxCall(ajaxOptions, resolve, reject);
     });
@@ -475,7 +483,7 @@ function PPostCall(url, parameter) {
             type: "POST",
             url: url,
             data: parameter,
-            timeout: WConfig.ajax.timeout
+            timeout: PConfig.ajax.timeout
         };
         PAjaxCall(ajaxOptions, resolve, reject);
     });
@@ -487,7 +495,7 @@ function PGetCall(url, parameter) {
             type: "GET",
             url: url,
             data: parameter,
-            timeout: WConfig.ajax.timeout
+            timeout: PConfig.ajax.timeout
         };
         PAjaxCall(ajaxOptions, resolve, reject);
     });
@@ -501,7 +509,7 @@ function PPutJsonCall(url, parameter) {
             data: $.toJSON(parameter),
             dataType: "json",
             contentType : 'application/json;charset=utf-8',
-            timeout: WConfig.ajax.timeout
+            timeout: PConfig.ajax.timeout
         };
         PAjaxCall(ajaxOptions, resolve, reject);
     });
