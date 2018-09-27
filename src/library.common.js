@@ -3,6 +3,17 @@ function isNull(str) {
     return str == null || str.value == "";
 }
 
+function convertEmptyToNull(str) {
+    return isNull(str) ? null : str;
+}
+
+function StringNumber(number, defaultValue) {
+    if (number == undefined || number == null) {
+        return defaultValue ? String(defaultValue) : "0";
+    }
+    return String(number);
+}
+
 // https://developer.mozilla.org/en-US/docs/Web/API/URL
 // /en-US/docs/Web/API/URL
 // ../en-US/docs/Web/API/URL

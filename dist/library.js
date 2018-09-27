@@ -1,4 +1,4 @@
-/*! LibraryJS - v0.0.1 - 2018-09-12 */
+/*! LibraryJS - v0.0.1 - 2018-09-26 */
 /*! https://github.com/hardimplistic */
 'use strict';
 
@@ -146,6 +146,17 @@ if (!String.prototype.toHashCode) {
 
 function isNull(str) {
     return str == null || str.value == "";
+}
+
+function convertEmptyToNull(str) {
+    return isNull(str) ? null : str;
+}
+
+function StringNumber(number, defaultValue) {
+    if (number == undefined || number == null) {
+        return defaultValue ? String(defaultValue) : "0";
+    }
+    return String(number);
 }
 
 // https://developer.mozilla.org/en-US/docs/Web/API/URL
