@@ -40,6 +40,23 @@ module.exports = function (grunt) {
                         'src/library.assert.js',
                     ]
                 }
+            },
+            datapage: {
+                files: {
+                    'datapage/dist/library.js': [
+                        'src/library.polyfill.js',
+                        'src/library.common.js',
+                        'src/library.network.js',
+                        'src/library.form.js',
+                        'src/library.storage.js',
+                        'src/library.chain.js',
+                        'src/library.asyncqueue.js',
+                        'src/library.data.js',
+                        'src/library.uuid.js',
+                        'src/library.hashcode.js',
+                        'src/library.assert.js',
+                    ]
+                }
             }
         },
         uglify: {
@@ -47,6 +64,11 @@ module.exports = function (grunt) {
                 files: {
                     'dist/library.min.js': ['dist/library.js'],
                     'dist/library.dependencies.min.js': ['dist/library.js']
+                }
+            },
+            datapage: {
+                files: {
+                    'datapage/dist/library.min.js': ['datapage/dist/library.js']
                 }
             }
         },
@@ -84,5 +106,6 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-contrib-copy');
     grunt.loadNpmTasks('grunt-contrib-jshint');
     grunt.registerTask('default', ['concat:dist', 'uglify:dist', 'copy:test']);
+    grunt.registerTask('datapage', ['concat:datapage', 'uglify:datapage']);
     grunt.registerTask('jshintc', ['jshint']);
 };
