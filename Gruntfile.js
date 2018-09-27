@@ -55,6 +55,7 @@ module.exports = function (grunt) {
                         'src/library.uuid.js',
                         'src/library.hashcode.js',
                         'src/library.assert.js',
+                        'datapage/src/functions.js',
                     ]
                 }
             }
