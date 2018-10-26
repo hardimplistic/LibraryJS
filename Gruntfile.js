@@ -36,6 +36,7 @@ module.exports = function (grunt) {
                         'src/library.asyncqueue.js',
                         'src/library.data.js',
                         'src/library.uuid.js',
+                        'src/library.cache.js',
                         'src/library.hashcode.js',
                         'src/library.assert.js',
                     ]
@@ -53,6 +54,7 @@ module.exports = function (grunt) {
                         'src/library.asyncqueue.js',
                         'src/library.data.js',
                         'src/library.uuid.js',
+                        'src/library.cache.js',
                         'src/library.hashcode.js',
                         'src/library.assert.js',
                         'datapage/src/functions.js',
