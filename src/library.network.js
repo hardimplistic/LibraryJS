@@ -1,26 +1,40 @@
 
-
-function getSearchParameter(key) {
+function getSearchParameter(key, defValue) {
     if (location.search && location.search.substring(1)) {
         var arr, reg = new RegExp("(^|&)" + key + "=([^&]*)(&|$)");
         if (arr = location.search.substring(1).match(reg))
             return unescape(arr[2]);
         else
-            return null;
+            return defValue ? defValue : null;
     } else {
-        return null;
+        return defValue ? defValue : null;
     }
 }
 
-function getHashParameter(key) {
+function getHashParameter(key, defValue) {
     if (location.hash && location.hash.substring(1)) {
         var arr, reg = new RegExp("(^|&)" + key + "=([^&]*)(&|$)");
         if (arr = location.hash.substring(1).match(reg))
-            return unescape(arr[2]);
+            return decodeURIComponent(arr[2]);
         else
-            return null;
+            return defValue ? defValue : null;
     } else {
-        return null;
+        return defValue ? defValue : null;
+    }
+}
+
+function getStringParameter(string, key, defValue) {
+    if (string && string.substring(0, 1) == '#') {
+        string = string.substring(1);
+    }
+    if (string) {
+        var arr, reg = new RegExp("(^|&)" + key + "=([^&]*)(&|$)");
+        if (arr = string.match(reg))
+            return decodeURIComponent(arr[2]);
+        else
+            return defValue ? defValue : null;
+    } else {
+        return defValue ? defValue : null;
     }
 }
 

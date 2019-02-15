@@ -1,4 +1,4 @@
-/*! LibraryJS - v0.0.1 - 2018-10-26 */
+/*! LibraryJS - v0.0.1 - 2019-02-15 */
 /*! https://github.com/hardimplistic */
 'use strict';
 
@@ -145,18 +145,45 @@ if (!String.prototype.toHashCode) {
 // Source: src/library.common.js
 
 function isNull(str) {
-    return str == null || str.value == "";
+    return str == null || str.length === 0;
 }
 
 function convertEmptyToNull(str) {
     return isNull(str) ? null : str;
 }
 
+/**
+ * @return {string}
+ */
+function StringValue(value, defaultValue) {
+    if (value === undefined || number == null) {
+        return defaultValue ? String(defaultValue) : "";
+    }
+    return String(value);
+}
+
+/**
+ * @return {string}
+ */
 function StringNumber(number, defaultValue) {
-    if (number == undefined || number == null) {
+    if (number === undefined || number == null) {
         return defaultValue ? String(defaultValue) : "0";
     }
     return String(number);
+}
+
+function Timestamp(longTime) {
+    var time = longTime > 0 ? longTime : Date.now();
+    this.getTime = function() {
+        return time;
+    };
+    this.getDate = function() {
+        return new Date(time);
+    };
+    this.toString = function() {
+        return time + '';
+    };
+    return this;
 }
 
 // https://developer.mozilla.org/en-US/docs/Web/API/URL
@@ -208,31 +235,81 @@ function LocationRedirect(path, _debugger) {
 }
 LocationRedirect.prototype._debugger = false;
 
+function LocationHref(base) {
+    var tmp = '';
+    var url = [base];
+    this.put = function(key, value) {
+        if (value == undefined || value == null || value == '') {
+            return;
+        }
+        tmp = url.join('');
+        if (url.length == 1 && tmp.indexOf('?') == -1) {
+            url.push('?' + key + '=' + (value ? encodeURIComponent(value) : ''));
+        } else {
+            url.push('&' + key + '=' + (value ? encodeURIComponent(value) : ''));
+        }
+    };
+    this.get = function() {
+        return url.join('');
+    };
+    this.forward = function() {
+        location.href = this.get();
+    };
+    return this;
+}
 
+function LocationHash() {
+    var tmp = '';
+    var url = ['#'];
+    this.put = function(key, value) {
+        if (value == undefined || value == null || value == '') {
+            return;
+        }
+        url.push(key + '=' + (value ? encodeURIComponent(value) : ''));
+    };
+    this.get = function() {
+        return url.join('&');
+    };
+    return this;
+}
 // Source: src/library.network.js
 
-
-function getSearchParameter(key) {
+function getSearchParameter(key, defValue) {
     if (location.search && location.search.substring(1)) {
         var arr, reg = new RegExp("(^|&)" + key + "=([^&]*)(&|$)");
         if (arr = location.search.substring(1).match(reg))
             return unescape(arr[2]);
         else
-            return null;
+            return defValue ? defValue : null;
     } else {
-        return null;
+        return defValue ? defValue : null;
     }
 }
 
-function getHashParameter(key) {
+function getHashParameter(key, defValue) {
     if (location.hash && location.hash.substring(1)) {
         var arr, reg = new RegExp("(^|&)" + key + "=([^&]*)(&|$)");
         if (arr = location.hash.substring(1).match(reg))
-            return unescape(arr[2]);
+            return decodeURIComponent(arr[2]);
         else
-            return null;
+            return defValue ? defValue : null;
     } else {
-        return null;
+        return defValue ? defValue : null;
+    }
+}
+
+function getStringParameter(string, key, defValue) {
+    if (string && string.substring(0, 1) == '#') {
+        string = string.substring(1);
+    }
+    if (string) {
+        var arr, reg = new RegExp("(^|&)" + key + "=([^&]*)(&|$)");
+        if (arr = string.match(reg))
+            return decodeURIComponent(arr[2]);
+        else
+            return defValue ? defValue : null;
+    } else {
+        return defValue ? defValue : null;
     }
 }
 
@@ -992,6 +1069,13 @@ function uuid(len, radix) {
         }
     }
     return uuid.join('');
+}
+
+function guid() {
+    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+        var r = Math.random()*16|0, v = c == 'x' ? r : (r&0x3|0x8);
+        return v.toString(16);
+    });
 }
 
 function CreateID(prefix){

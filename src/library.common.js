@@ -1,17 +1,44 @@
 
 function isNull(str) {
-    return str == null || str.value == "";
+    return str == null || str.length === 0;
 }
 
 function convertEmptyToNull(str) {
     return isNull(str) ? null : str;
 }
 
+/**
+ * @return {string}
+ */
+function StringValue(value, defaultValue) {
+    if (value === undefined || number == null) {
+        return defaultValue ? String(defaultValue) : "";
+    }
+    return String(value);
+}
+
+/**
+ * @return {string}
+ */
 function StringNumber(number, defaultValue) {
-    if (number == undefined || number == null) {
+    if (number === undefined || number == null) {
         return defaultValue ? String(defaultValue) : "0";
     }
     return String(number);
+}
+
+function Timestamp(longTime) {
+    var time = longTime > 0 ? longTime : Date.now();
+    this.getTime = function() {
+        return time;
+    };
+    this.getDate = function() {
+        return new Date(time);
+    };
+    this.toString = function() {
+        return time + '';
+    };
+    return this;
 }
 
 // https://developer.mozilla.org/en-US/docs/Web/API/URL
@@ -63,3 +90,40 @@ function LocationRedirect(path, _debugger) {
 }
 LocationRedirect.prototype._debugger = false;
 
+function LocationHref(base) {
+    var tmp = '';
+    var url = [base];
+    this.put = function(key, value) {
+        if (value == undefined || value == null || value == '') {
+            return;
+        }
+        tmp = url.join('');
+        if (url.length == 1 && tmp.indexOf('?') == -1) {
+            url.push('?' + key + '=' + (value ? encodeURIComponent(value) : ''));
+        } else {
+            url.push('&' + key + '=' + (value ? encodeURIComponent(value) : ''));
+        }
+    };
+    this.get = function() {
+        return url.join('');
+    };
+    this.forward = function() {
+        location.href = this.get();
+    };
+    return this;
+}
+
+function LocationHash() {
+    var tmp = '';
+    var url = ['#'];
+    this.put = function(key, value) {
+        if (value == undefined || value == null || value == '') {
+            return;
+        }
+        url.push(key + '=' + (value ? encodeURIComponent(value) : ''));
+    };
+    this.get = function() {
+        return url.join('&');
+    };
+    return this;
+}
