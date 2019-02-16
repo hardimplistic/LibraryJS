@@ -268,28 +268,6 @@ function PJsonCall(url, parameter) {
     });
 }
 
-function PPostJsonCall(url, parameter) {
-    PJsonCall(url, parameter);
-}
-
-function PBodyCall(url, parameter) {
-    PJsonCall(url, parameter);
-}
-
-function PDeleteJsonCall(url, parameter) {
-    return new Promise(function(resolve, reject) {
-        var ajaxOptions = {
-            type: "DELETE",
-            url: url,
-            data: $.toJSON(parameter),
-            dataType: "json",
-            contentType : 'application/json;charset=utf-8',
-            timeout: PConfig.ajax.timeout
-        };
-        PAjaxCall(ajaxOptions, resolve, reject);
-    });
-}
-
 function PPostCall(url, parameter) {
     return new Promise(function(resolve, reject) {
         var ajaxOptions = {
@@ -300,6 +278,10 @@ function PPostCall(url, parameter) {
         };
         PAjaxCall(ajaxOptions, resolve, reject);
     });
+}
+
+function PBodyCall(url, parameter) {
+    PJsonCall(url, parameter);
 }
 
 function PGetCall(url, parameter) {
@@ -314,10 +296,38 @@ function PGetCall(url, parameter) {
     });
 }
 
+function PPostJsonCall(url, parameter) {
+    return new Promise(function(resolve, reject) {
+        var ajaxOptions = {
+            type: "POST",
+            url: url,
+            data: $.toJSON(parameter),
+            dataType: "json",
+            contentType : 'application/json;charset=utf-8',
+            timeout: PConfig.ajax.timeout
+        };
+        PAjaxCall(ajaxOptions, resolve, reject);
+    });
+}
+
 function PPutJsonCall(url, parameter) {
     return new Promise(function(resolve, reject) {
         var ajaxOptions = {
             type: "PUT",
+            url: url,
+            data: $.toJSON(parameter),
+            dataType: "json",
+            contentType : 'application/json;charset=utf-8',
+            timeout: PConfig.ajax.timeout
+        };
+        PAjaxCall(ajaxOptions, resolve, reject);
+    });
+}
+
+function PDeleteJsonCall(url, parameter) {
+    return new Promise(function(resolve, reject) {
+        var ajaxOptions = {
+            type: "DELETE",
             url: url,
             data: $.toJSON(parameter),
             dataType: "json",
