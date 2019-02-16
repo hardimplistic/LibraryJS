@@ -66,7 +66,7 @@ module.exports = function (grunt) {
             dist: {
                 files: {
                     'dist/library.min.js': ['dist/library.js'],
-                    'dist/library.dependencies.min.js': ['dist/library.js']
+                    'dist/library.dependencies.min.js': ['dist/library.dependencies.js']
                 }
             },
             datapage: {
