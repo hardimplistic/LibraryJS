@@ -269,11 +269,11 @@ function PJsonCall(url, parameter) {
 }
 
 function PPostJsonCall(url, parameter) {
-    PJsonCall(url, parameter);
+    return PJsonCall(url, parameter);
 }
 
 function PBodyCall(url, parameter) {
-    PJsonCall(url, parameter);
+    return PJsonCall(url, parameter);
 }
 
 function PDeleteJsonCall(url, parameter) {

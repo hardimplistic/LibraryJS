@@ -1,4 +1,4 @@
-/*! LibraryJS - v0.0.1 - 2019-02-15 */
+/*! LibraryJS - v0.0.1 - 2019-03-08 */
 /*! https://github.com/hardimplistic */
 'use strict';
 
@@ -544,11 +544,11 @@ function PJsonCall(url, parameter) {
 }
 
 function PPostJsonCall(url, parameter) {
-    PJsonCall(url, parameter);
+    return PJsonCall(url, parameter);
 }
 
 function PBodyCall(url, parameter) {
-    PJsonCall(url, parameter);
+    return PJsonCall(url, parameter);
 }
 
 function PDeleteJsonCall(url, parameter) {
