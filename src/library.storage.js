@@ -27,6 +27,9 @@ var WStorage = {
     removeItem: function(key) {
         localStorage.removeItem('_type_' + key);
         localStorage.removeItem(key)
+    },
+    clear: function() {
+        localStorage.clear();
     }
 };
 
