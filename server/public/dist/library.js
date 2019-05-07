@@ -1,4 +1,4 @@
-/*! LibraryJS - v0.0.1 - 2019-03-08 */
+/*! LibraryJS - v0.0.1 - 2019-05-07 */
 /*! https://github.com/hardimplistic */
 'use strict';
 
@@ -614,6 +614,120 @@ function PDeleteJsonCall(url, parameter) {
 }
 
 
+/** Promise Token AjaxCall */
+
+function PAccessToken(token) {
+    if (token === undefined) {
+        // get
+        return WStorage.getItem('PAccessToken');
+    } else {
+        // set
+        WStorage.setItem('PAccessToken', token);
+        return WStorage.getItem('PAccessToken');
+    }
+}
+
+function PTokenJsonCall(url, parameter) {
+    return new Promise(function(resolve, reject) {
+        var ajaxOptions = {
+            type: "POST",
+            url: url,
+            data: $.toJSON(parameter),
+            dataType: "json",
+            contentType : 'application/json;charset=utf-8',
+            timeout: PConfig.ajax.timeout,
+            headers: {
+                token: PAccessToken()
+            },
+        };
+        PAjaxCall(ajaxOptions, resolve, reject);
+    });
+}
+
+function PTokenBodyCall(url, parameter) {
+    return PTokenJsonCall(url, parameter);
+}
+
+function PTokenPostCall(url, parameter) {
+    return new Promise(function(resolve, reject) {
+        var ajaxOptions = {
+            type: "POST",
+            url: url,
+            data: parameter,
+            timeout: PConfig.ajax.timeout,
+            headers: {
+                token: PAccessToken()
+            },
+        };
+        PAjaxCall(ajaxOptions, resolve, reject);
+    });
+}
+
+function PTokenGetCall(url, parameter) {
+    return new Promise(function(resolve, reject) {
+        var ajaxOptions = {
+            type: "GET",
+            url: url,
+            data: parameter,
+            timeout: PConfig.ajax.timeout,
+            headers: {
+                token: PAccessToken()
+            },
+        };
+        PAjaxCall(ajaxOptions, resolve, reject);
+    });
+}
+
+function PTokenPostJsonCall(url, parameter) {
+    return new Promise(function(resolve, reject) {
+        var ajaxOptions = {
+            type: "POST",
+            url: url,
+            data: $.toJSON(parameter),
+            dataType: "json",
+            contentType : 'application/json;charset=utf-8',
+            timeout: PConfig.ajax.timeout,
+            headers: {
+                token: PAccessToken()
+            },
+        };
+        PAjaxCall(ajaxOptions, resolve, reject);
+    });
+}
+
+function PPutJsonCall(url, parameter) {
+    return new Promise(function(resolve, reject) {
+        var ajaxOptions = {
+            type: "PUT",
+            url: url,
+            data: $.toJSON(parameter),
+            dataType: "json",
+            contentType : 'application/json;charset=utf-8',
+            timeout: PConfig.ajax.timeout,
+            headers: {
+                token: PAccessToken()
+            },
+        };
+        PAjaxCall(ajaxOptions, resolve, reject);
+    });
+}
+
+function PDeleteJsonCall(url, parameter) {
+    return new Promise(function(resolve, reject) {
+        var ajaxOptions = {
+            type: "DELETE",
+            url: url,
+            data: $.toJSON(parameter),
+            dataType: "json",
+            contentType : 'application/json;charset=utf-8',
+            timeout: PConfig.ajax.timeout,
+            headers: {
+                token: PAccessToken()
+            },
+        };
+        PAjaxCall(ajaxOptions, resolve, reject);
+    });
+}
 
 
 

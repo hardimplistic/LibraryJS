@@ -1,4 +1,4 @@
-/*! LibraryJS - v0.0.1 - 2019-05-07 */
+/*! LibraryJS - v0.0.1 - 2018-09-27 */
 /*! https://github.com/hardimplistic */
 'use strict';
 
@@ -145,45 +145,18 @@ if (!String.prototype.toHashCode) {
 // Source: src/library.common.js
 
 function isNull(str) {
-    return str == null || str.length === 0;
+    return str == null || str.value == "";
 }
 
 function convertEmptyToNull(str) {
     return isNull(str) ? null : str;
 }
 
-/**
- * @return {string}
- */
-function StringValue(value, defaultValue) {
-    if (value === undefined || number == null) {
-        return defaultValue ? String(defaultValue) : "";
-    }
-    return String(value);
-}
-
-/**
- * @return {string}
- */
 function StringNumber(number, defaultValue) {
-    if (number === undefined || number == null) {
+    if (number == undefined || number == null) {
         return defaultValue ? String(defaultValue) : "0";
     }
     return String(number);
-}
-
-function Timestamp(longTime) {
-    var time = longTime > 0 ? longTime : Date.now();
-    this.getTime = function() {
-        return time;
-    };
-    this.getDate = function() {
-        return new Date(time);
-    };
-    this.toString = function() {
-        return time + '';
-    };
-    return this;
 }
 
 // https://developer.mozilla.org/en-US/docs/Web/API/URL
@@ -235,81 +208,31 @@ function LocationRedirect(path, _debugger) {
 }
 LocationRedirect.prototype._debugger = false;
 
-function LocationHref(base) {
-    var tmp = '';
-    var url = [base];
-    this.put = function(key, value) {
-        if (value == undefined || value == null || value == '') {
-            return;
-        }
-        tmp = url.join('');
-        if (url.length == 1 && tmp.indexOf('?') == -1) {
-            url.push('?' + key + '=' + (value ? encodeURIComponent(value) : ''));
-        } else {
-            url.push('&' + key + '=' + (value ? encodeURIComponent(value) : ''));
-        }
-    };
-    this.get = function() {
-        return url.join('');
-    };
-    this.forward = function() {
-        location.href = this.get();
-    };
-    return this;
-}
 
-function LocationHash() {
-    var tmp = '';
-    var url = ['#'];
-    this.put = function(key, value) {
-        if (value == undefined || value == null || value == '') {
-            return;
-        }
-        url.push(key + '=' + (value ? encodeURIComponent(value) : ''));
-    };
-    this.get = function() {
-        return url.join('&');
-    };
-    return this;
-}
 // Source: src/library.network.js
 
-function getSearchParameter(key, defValue) {
+
+function getSearchParameter(key) {
     if (location.search && location.search.substring(1)) {
         var arr, reg = new RegExp("(^|&)" + key + "=([^&]*)(&|$)");
         if (arr = location.search.substring(1).match(reg))
             return unescape(arr[2]);
         else
-            return defValue ? defValue : null;
+            return null;
     } else {
-        return defValue ? defValue : null;
+        return null;
     }
 }
 
-function getHashParameter(key, defValue) {
+function getHashParameter(key) {
     if (location.hash && location.hash.substring(1)) {
         var arr, reg = new RegExp("(^|&)" + key + "=([^&]*)(&|$)");
         if (arr = location.hash.substring(1).match(reg))
-            return decodeURIComponent(arr[2]);
+            return unescape(arr[2]);
         else
-            return defValue ? defValue : null;
+            return null;
     } else {
-        return defValue ? defValue : null;
-    }
-}
-
-function getStringParameter(string, key, defValue) {
-    if (string && string.substring(0, 1) == '#') {
-        string = string.substring(1);
-    }
-    if (string) {
-        var arr, reg = new RegExp("(^|&)" + key + "=([^&]*)(&|$)");
-        if (arr = string.match(reg))
-            return decodeURIComponent(arr[2]);
-        else
-            return defValue ? defValue : null;
-    } else {
-        return defValue ? defValue : null;
+        return null;
     }
 }
 
@@ -543,8 +466,26 @@ function PJsonCall(url, parameter) {
     });
 }
 
+function PPostJsonCall(url, parameter) {
+    PJsonCall(url, parameter);
+}
+
 function PBodyCall(url, parameter) {
-    return PJsonCall(url, parameter);
+    PJsonCall(url, parameter);
+}
+
+function PDeleteJsonCall(url, parameter) {
+    return new Promise(function(resolve, reject) {
+        var ajaxOptions = {
+            type: "DELETE",
+            url: url,
+            data: $.toJSON(parameter),
+            dataType: "json",
+            contentType : 'application/json;charset=utf-8',
+            timeout: PConfig.ajax.timeout
+        };
+        PAjaxCall(ajaxOptions, resolve, reject);
+    });
 }
 
 function PPostCall(url, parameter) {
@@ -571,20 +512,6 @@ function PGetCall(url, parameter) {
     });
 }
 
-function PPostJsonCall(url, parameter) {
-    return new Promise(function(resolve, reject) {
-        var ajaxOptions = {
-            type: "POST",
-            url: url,
-            data: $.toJSON(parameter),
-            dataType: "json",
-            contentType : 'application/json;charset=utf-8',
-            timeout: PConfig.ajax.timeout
-        };
-        PAjaxCall(ajaxOptions, resolve, reject);
-    });
-}
-
 function PPutJsonCall(url, parameter) {
     return new Promise(function(resolve, reject) {
         var ajaxOptions = {
@@ -599,135 +526,7 @@ function PPutJsonCall(url, parameter) {
     });
 }
 
-function PDeleteJsonCall(url, parameter) {
-    return new Promise(function(resolve, reject) {
-        var ajaxOptions = {
-            type: "DELETE",
-            url: url,
-            data: $.toJSON(parameter),
-            dataType: "json",
-            contentType : 'application/json;charset=utf-8',
-            timeout: PConfig.ajax.timeout
-        };
-        PAjaxCall(ajaxOptions, resolve, reject);
-    });
-}
 
-
-/** Promise Token AjaxCall */
-
-function PAccessToken(token) {
-    if (token === undefined) {
-        // get
-        return WStorage.getItem('PAccessToken');
-    } else {
-        // set
-        WStorage.setItem('PAccessToken', token);
-        return WStorage.getItem('PAccessToken');
-    }
-}
-
-function PTokenJsonCall(url, parameter) {
-    return new Promise(function(resolve, reject) {
-        var ajaxOptions = {
-            type: "POST",
-            url: url,
-            data: $.toJSON(parameter),
-            dataType: "json",
-            contentType : 'application/json;charset=utf-8',
-            timeout: PConfig.ajax.timeout,
-            headers: {
-                token: PAccessToken()
-            },
-        };
-        PAjaxCall(ajaxOptions, resolve, reject);
-    });
-}
-
-function PTokenBodyCall(url, parameter) {
-    return PTokenJsonCall(url, parameter);
-}
-
-function PTokenPostCall(url, parameter) {
-    return new Promise(function(resolve, reject) {
-        var ajaxOptions = {
-            type: "POST",
-            url: url,
-            data: parameter,
-            timeout: PConfig.ajax.timeout,
-            headers: {
-                token: PAccessToken()
-            },
-        };
-        PAjaxCall(ajaxOptions, resolve, reject);
-    });
-}
-
-function PTokenGetCall(url, parameter) {
-    return new Promise(function(resolve, reject) {
-        var ajaxOptions = {
-            type: "GET",
-            url: url,
-            data: parameter,
-            timeout: PConfig.ajax.timeout,
-            headers: {
-                token: PAccessToken()
-            },
-        };
-        PAjaxCall(ajaxOptions, resolve, reject);
-    });
-}
-
-function PTokenPostJsonCall(url, parameter) {
-    return new Promise(function(resolve, reject) {
-        var ajaxOptions = {
-            type: "POST",
-            url: url,
-            data: $.toJSON(parameter),
-            dataType: "json",
-            contentType : 'application/json;charset=utf-8',
-            timeout: PConfig.ajax.timeout,
-            headers: {
-                token: PAccessToken()
-            },
-        };
-        PAjaxCall(ajaxOptions, resolve, reject);
-    });
-}
-
-function PPutJsonCall(url, parameter) {
-    return new Promise(function(resolve, reject) {
-        var ajaxOptions = {
-            type: "PUT",
-            url: url,
-            data: $.toJSON(parameter),
-            dataType: "json",
-            contentType : 'application/json;charset=utf-8',
-            timeout: PConfig.ajax.timeout,
-            headers: {
-                token: PAccessToken()
-            },
-        };
-        PAjaxCall(ajaxOptions, resolve, reject);
-    });
-}
-
-function PDeleteJsonCall(url, parameter) {
-    return new Promise(function(resolve, reject) {
-        var ajaxOptions = {
-            type: "DELETE",
-            url: url,
-            data: $.toJSON(parameter),
-            dataType: "json",
-            contentType : 'application/json;charset=utf-8',
-            timeout: PConfig.ajax.timeout,
-            headers: {
-                token: PAccessToken()
-            },
-        };
-        PAjaxCall(ajaxOptions, resolve, reject);
-    });
-}
 
 
 
@@ -866,9 +665,6 @@ var WStorage = {
     removeItem: function(key) {
         localStorage.removeItem('_type_' + key);
         localStorage.removeItem(key)
-    },
-    clear: function() {
-        localStorage.clear();
     }
 };
 
@@ -1198,100 +994,10 @@ function uuid(len, radix) {
     return uuid.join('');
 }
 
-function guid() {
-    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
-        var r = Math.random()*16|0, v = c == 'x' ? r : (r&0x3|0x8);
-        return v.toString(16);
-    });
-}
-
 function CreateID(prefix){
     if(!prefix) prefix = 'ID';
     return '{0}_{1}_{2}'.format(prefix, uuid(8, 16), Math.round( Math.random() * 100 ));
 }
-
-// Source: src/library.cache.js
-
-
-var MediaCache = {};
-
-MediaCache.ImageLoad = function(urlArray, progress, __debugger__) {
-
-    var map = new Map();
-
-    var container = $('#MediaCacheImageContainer');
-    if (container.length === 0) {
-        container = $('<div id="MediaCacheImageContainer"/>').hide();
-    }
-
-    urlArray.forEach(function(url, idx) {
-        map.set(url, false);
-        var src = url;
-        if (__debugger__ === true) {
-            if (src.indexOf('?') === -1) {
-                src += '?v=' + new Date().getTime();
-            } else {
-                src += '&v=' + new Date().getTime();
-            }
-        }
-        var id = CreateID();
-        var jQImage = $('<img/>')
-            .attr('id', id)
-            .attr('src', src)
-            .attr('data-src', url)
-        ;
-        jQImage[0].onload = function() {
-            var url = $(this).data('src');
-            map.set(url, true);
-            progress && progress(url, map);
-        };
-        container.append(jQImage);
-    });
-
-    $('body').append(container);
-
-};
-
-MediaCache.AudioLoad = function(urlArray, progress, __debugger__) {
-
-    var map = new Map();
-
-    var container = $('#MediaCacheAudioContainer');
-    if (container.length === 0) {
-        container = $('<div id="MediaCacheAudioContainer"/>').hide();
-    }
-
-    urlArray.forEach(function(url, idx) {
-        map.set(url, false);
-        var id = CreateID();
-        var jQAudio = $('<audio preload="auto" muted/>')
-            .attr('id', id)
-            .attr('data-src', url)
-        ;
-        if (__debugger__ === true) {
-            if (url.indexOf('?') === -1) {
-                url += '?v=' + new Date().getTime();
-            } else {
-                url += '&v=' + new Date().getTime();
-            }
-        }
-        var jQSource = $('<source src="" type="audio/mpeg"/>').attr('src', url);
-        jQAudio.append(jQSource);
-        var audio = jQAudio[0];
-        audio.load();
-        audio.addEventListener("canplaythrough",
-            function() {
-                var url = $(this).data('src');
-                map.set(url, true);
-                progress && progress(url, map);
-            },
-            false);
-        container.append(jQAudio);
-    });
-
-    $('body').append(container);
-
-};
 
 // Source: src/library.hashcode.js
 /**
@@ -1387,3 +1093,47 @@ var AssertJS = {
         }
     }
 };
+// Source: datapage/src/functions.js
+
+
+//カンマを付けよう
+function ChMoney(str) {
+    var remoney = "";
+    var money1 = new String(str);
+    var money2= "";
+    var cut = money1.length;
+    var mp = money1.substr(0,1);
+    if(mp == '-') {
+        money1 = money1.substr(1,cut);
+        cut = cut - 1;
+    }
+    for(var i = 0; i < cut; i +=3) {
+        if(i == 0) {
+            money2=money1.substr(cut-3,3);
+        } else if(cut-i-3 >= 0) {
+            money2=money1.substr(cut-3-i,3) + "," + money2;
+        } else {
+            money2=money1.substr(0,cut-i) + "," + money2;
+        }
+    }
+    if(mp == '-') {
+        remoney = mp + money2;
+    } else {
+        remoney = money2;
+    }
+    return remoney;
+}
+
+//率計算・第二位四捨五入
+function Ritsu(par1,par2) {
+    var writsu = "";
+    var wlen = 0;
+    writsu = Math.round(par1/par2*1000);
+    writsu = writsu / 10;
+    wlen = writsu.toString().indexOf(".",0);
+    if(wlen == -1) {
+        writsu = writsu+".0";
+    }
+    return writsu;
+}
+
