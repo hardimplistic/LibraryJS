@@ -471,9 +471,10 @@ function WGetCall(url, parameter, callback, defaultReturn) {
 
 var PConfig = {
     ajax: {
-        timeout: 500000,        // 超时
-        loginStatus: 80403,     // 需要登录
-        loginUrl: '/login.html' // 登录地址
+        timeout: 500000,         // 超时
+        loginStatus: 80403,      // 需要登录
+        loginUrl: '/login.html', // 登录地址
+        tokenKey: 'token'
     }
 };
 
@@ -636,9 +637,11 @@ function PTokenJsonCall(url, parameter) {
             dataType: "json",
             contentType : 'application/json;charset=utf-8',
             timeout: PConfig.ajax.timeout,
-            headers: {
-                token: PAccessToken()
-            },
+            headers: (function() {
+                var headers = {};
+                headers[PConfig.ajax.tokenKey] = PAccessToken();
+                return headers;
+            })(),
         };
         PAjaxCall(ajaxOptions, resolve, reject);
     });
@@ -655,9 +658,11 @@ function PTokenPostCall(url, parameter) {
             url: url,
             data: parameter,
             timeout: PConfig.ajax.timeout,
-            headers: {
-                token: PAccessToken()
-            },
+            headers: (function() {
+                var headers = {};
+                headers[PConfig.ajax.tokenKey] = PAccessToken();
+                return headers;
+            })(),
         };
         PAjaxCall(ajaxOptions, resolve, reject);
     });
@@ -670,9 +675,11 @@ function PTokenGetCall(url, parameter) {
             url: url,
             data: parameter,
             timeout: PConfig.ajax.timeout,
-            headers: {
-                token: PAccessToken()
-            },
+            headers: (function() {
+                var headers = {};
+                headers[PConfig.ajax.tokenKey] = PAccessToken();
+                return headers;
+            })(),
         };
         PAjaxCall(ajaxOptions, resolve, reject);
     });
@@ -687,9 +694,11 @@ function PTokenPostJsonCall(url, parameter) {
             dataType: "json",
             contentType : 'application/json;charset=utf-8',
             timeout: PConfig.ajax.timeout,
-            headers: {
-                token: PAccessToken()
-            },
+            headers: (function() {
+                var headers = {};
+                headers[PConfig.ajax.tokenKey] = PAccessToken();
+                return headers;
+            })(),
         };
         PAjaxCall(ajaxOptions, resolve, reject);
     });
@@ -704,9 +713,11 @@ function PPutJsonCall(url, parameter) {
             dataType: "json",
             contentType : 'application/json;charset=utf-8',
             timeout: PConfig.ajax.timeout,
-            headers: {
-                token: PAccessToken()
-            },
+            headers: (function() {
+                var headers = {};
+                headers[PConfig.ajax.tokenKey] = PAccessToken();
+                return headers;
+            })(),
         };
         PAjaxCall(ajaxOptions, resolve, reject);
     });
@@ -721,9 +732,11 @@ function PDeleteJsonCall(url, parameter) {
             dataType: "json",
             contentType : 'application/json;charset=utf-8',
             timeout: PConfig.ajax.timeout,
-            headers: {
-                token: PAccessToken()
-            },
+            headers: (function() {
+                var headers = {};
+                headers[PConfig.ajax.tokenKey] = PAccessToken();
+                return headers;
+            })(),
         };
         PAjaxCall(ajaxOptions, resolve, reject);
     });
