@@ -1,4 +1,4 @@
-/*! LibraryJS - v0.0.1 - 2019-05-07 */
+/*! LibraryJS - v0.0.1 - 2019-05-09 */
 /*! https://github.com/hardimplistic */
 'use strict';
 
@@ -471,9 +471,23 @@ function WGetCall(url, parameter, callback, defaultReturn) {
 
 var PConfig = {
     ajax: {
-        timeout: 500000,        // 超时
-        loginStatus: 80403,     // 需要登录
-        loginUrl: '/login.html' // 登录地址
+        timeout: 500000,         // 超时
+        loginStatus: 80403,      // 需要登录
+        loginUrl: '/login.html', // 登录地址
+        tokenKey: 'token',
+        responseInterceptors: [
+            // 超时处理
+            function(response) {
+                return true;
+            },
+            // 判断状态码
+            function(response) {
+                return true;
+            },
+        ]
+    },
+    appendResponseInterceptors: function(fn) {
+        PConfig.ajax.responseInterceptors.push(fn);
     }
 };
 
@@ -636,9 +650,11 @@ function PTokenJsonCall(url, parameter) {
             dataType: "json",
             contentType : 'application/json;charset=utf-8',
             timeout: PConfig.ajax.timeout,
-            headers: {
-                token: PAccessToken()
-            },
+            headers: (function() {
+                var headers = {};
+                headers[PConfig.ajax.tokenKey] = PAccessToken();
+                return headers;
+            })(),
         };
         PAjaxCall(ajaxOptions, resolve, reject);
     });
@@ -655,9 +671,11 @@ function PTokenPostCall(url, parameter) {
             url: url,
             data: parameter,
             timeout: PConfig.ajax.timeout,
-            headers: {
-                token: PAccessToken()
-            },
+            headers: (function() {
+                var headers = {};
+                headers[PConfig.ajax.tokenKey] = PAccessToken();
+                return headers;
+            })(),
         };
         PAjaxCall(ajaxOptions, resolve, reject);
     });
@@ -670,9 +688,11 @@ function PTokenGetCall(url, parameter) {
             url: url,
             data: parameter,
             timeout: PConfig.ajax.timeout,
-            headers: {
-                token: PAccessToken()
-            },
+            headers: (function() {
+                var headers = {};
+                headers[PConfig.ajax.tokenKey] = PAccessToken();
+                return headers;
+            })(),
         };
         PAjaxCall(ajaxOptions, resolve, reject);
     });
@@ -687,15 +707,17 @@ function PTokenPostJsonCall(url, parameter) {
             dataType: "json",
             contentType : 'application/json;charset=utf-8',
             timeout: PConfig.ajax.timeout,
-            headers: {
-                token: PAccessToken()
-            },
+            headers: (function() {
+                var headers = {};
+                headers[PConfig.ajax.tokenKey] = PAccessToken();
+                return headers;
+            })(),
         };
         PAjaxCall(ajaxOptions, resolve, reject);
     });
 }
 
-function PPutJsonCall(url, parameter) {
+function PTokenPutJsonCall(url, parameter) {
     return new Promise(function(resolve, reject) {
         var ajaxOptions = {
             type: "PUT",
@@ -704,15 +726,17 @@ function PPutJsonCall(url, parameter) {
             dataType: "json",
             contentType : 'application/json;charset=utf-8',
             timeout: PConfig.ajax.timeout,
-            headers: {
-                token: PAccessToken()
-            },
+            headers: (function() {
+                var headers = {};
+                headers[PConfig.ajax.tokenKey] = PAccessToken();
+                return headers;
+            })(),
         };
         PAjaxCall(ajaxOptions, resolve, reject);
     });
 }
 
-function PDeleteJsonCall(url, parameter) {
+function PTokenDeleteJsonCall(url, parameter) {
     return new Promise(function(resolve, reject) {
         var ajaxOptions = {
             type: "DELETE",
@@ -721,9 +745,11 @@ function PDeleteJsonCall(url, parameter) {
             dataType: "json",
             contentType : 'application/json;charset=utf-8',
             timeout: PConfig.ajax.timeout,
-            headers: {
-                token: PAccessToken()
-            },
+            headers: (function() {
+                var headers = {};
+                headers[PConfig.ajax.tokenKey] = PAccessToken();
+                return headers;
+            })(),
         };
         PAjaxCall(ajaxOptions, resolve, reject);
     });

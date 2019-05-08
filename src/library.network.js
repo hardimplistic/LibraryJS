@@ -199,7 +199,20 @@ var PConfig = {
         timeout: 500000,         // 超时
         loginStatus: 80403,      // 需要登录
         loginUrl: '/login.html', // 登录地址
-        tokenKey: 'token'
+        tokenKey: 'token',
+        responseInterceptors: [
+            // 超时处理
+            function(response) {
+                return true;
+            },
+            // 判断状态码
+            function(response) {
+                return true;
+            },
+        ]
+    },
+    appendResponseInterceptors: function(fn) {
+        PConfig.ajax.responseInterceptors.push(fn);
     }
 };
 
@@ -429,7 +442,7 @@ function PTokenPostJsonCall(url, parameter) {
     });
 }
 
-function PPutJsonCall(url, parameter) {
+function PTokenPutJsonCall(url, parameter) {
     return new Promise(function(resolve, reject) {
         var ajaxOptions = {
             type: "PUT",
@@ -448,7 +461,7 @@ function PPutJsonCall(url, parameter) {
     });
 }
 
-function PDeleteJsonCall(url, parameter) {
+function PTokenDeleteJsonCall(url, parameter) {
     return new Promise(function(resolve, reject) {
         var ajaxOptions = {
             type: "DELETE",
