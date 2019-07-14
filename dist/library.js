@@ -1,4 +1,4 @@
-/*! LibraryJS - v0.0.1 - 2019-05-09 */
+/*! LibraryJS - v0.0.1 - 2019-07-14 */
 /*! https://github.com/hardimplistic */
 'use strict';
 
@@ -1234,6 +1234,17 @@ function guid() {
 function CreateID(prefix){
     if(!prefix) prefix = 'ID';
     return '{0}_{1}_{2}'.format(prefix, uuid(8, 16), Math.round( Math.random() * 100 ));
+}
+
+function uniqueid(prefix, delimiter) {
+    prefix = prefix ? prefix : '';
+    delimiter = delimiter ? delimiter : '';
+    var seed = new Date().getTime();
+    var salt = Math.round(Math.random() * 10000);
+    while (salt < 9999) {
+        salt *= 10;
+    }
+    return prefix + delimiter + salt.toString(16).toUpperCase() + (seed + salt).toString(16).toUpperCase();
 }
 
 // Source: src/library.cache.js
