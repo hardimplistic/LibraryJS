@@ -1239,12 +1239,9 @@ function CreateID(prefix){
 function uniqueid(prefix, delimiter) {
     prefix = prefix ? prefix : '';
     delimiter = delimiter ? delimiter : '';
-    var seed = new Date().getTime();
-    var salt = Math.round(Math.random() * 10000);
-    while (salt < 9999) {
-        salt *= 10;
-    }
-    return prefix + delimiter + salt.toString(16).toUpperCase() + (seed + salt).toString(16).toUpperCase();
+    var seed = new Date().getTime().toString(16).toUpperCase()
+    var salt = Math.random().toString(16).substring(2).toUpperCase()
+    return prefix + delimiter + seed + ',' + salt;
 }
 
 // Source: src/library.cache.js
