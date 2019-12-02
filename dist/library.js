@@ -1,4 +1,4 @@
-/*! LibraryJS - v0.0.1 - 2019-07-14 */
+/*! LibraryJS - v0.0.1 - 2019-12-02 */
 /*! https://github.com/hardimplistic */
 'use strict';
 
@@ -278,7 +278,7 @@ function getSearchParameter(key, defValue) {
     if (location.search && location.search.substring(1)) {
         var arr, reg = new RegExp("(^|&)" + key + "=([^&]*)(&|$)");
         if (arr = location.search.substring(1).match(reg))
-            return unescape(arr[2]);
+            return decodeURIComponent(arr[2]);
         else
             return defValue ? defValue : null;
     } else {
@@ -1239,8 +1239,8 @@ function CreateID(prefix){
 function uniqueid(prefix, delimiter) {
     prefix = prefix ? prefix : '';
     delimiter = delimiter ? delimiter : '';
-    var seed = new Date().getTime().toString(16).toUpperCase()
-    var salt = Math.random().toString(16).substring(2).toUpperCase()
+    var seed = new Date().getTime().toString(16).toUpperCase();
+    var salt = Math.random().toString(16).substring(2).toUpperCase();
     return prefix + delimiter + seed + ',' + salt;
 }
 

@@ -3,7 +3,7 @@ function getSearchParameter(key, defValue) {
     if (location.search && location.search.substring(1)) {
         var arr, reg = new RegExp("(^|&)" + key + "=([^&]*)(&|$)");
         if (arr = location.search.substring(1).match(reg))
-            return unescape(arr[2]);
+            return decodeURIComponent(arr[2]);
         else
             return defValue ? defValue : null;
     } else {

@@ -42,6 +42,35 @@ module.exports = function (grunt) {
                     ]
                 }
             },
+            xjxy: {
+                files: {
+                    'xjxy/library.dependencies.js': [
+                        'dependencies/jquery.js',
+                        'dependencies/jquery.json.js',
+                        'dependencies/jquery.base64.js',
+                        'dependencies/jquery.cookie.js',
+                        'dependencies/moment.js',
+                        'dependencies/moment-with-locales.js',
+                        'dependencies/md5.js',
+                        'dependencies/polyfill.promise.js',
+                    ],
+                    'xjxy/library.js': [
+                        'src/library.polyfill.js',
+                        'src/library.common.js',
+                        'src/library.network.js',
+                        'src/library.form.js',
+                        'src/library.storage.js',
+                        'src/library.chain.js',
+                        'src/library.asyncqueue.js',
+                        'src/library.data.js',
+                        'src/library.uuid.js',
+                        'src/library.cache.js',
+                        'src/library.hashcode.js',
+                        'src/library.assert.js',
+                        'src/library.mini.js',
+                    ]
+                }
+            },
             datapage: {
                 files: {
                     'datapage/dist/library.js': [
@@ -126,6 +155,12 @@ module.exports = function (grunt) {
                     'dist/library.dependencies.min.js': ['dist/library.dependencies.js']
                 }
             },
+            xjxy: {
+                files: {
+                    'xjxy/library.min.js': ['xjxy/library.js'],
+                    'xjxy/library.dependencies.min.js': ['xjxy/library.dependencies.js']
+                }
+            },
             datapage: {
                 files: {
                     'datapage/dist/library.min.js': ['datapage/dist/library.js']
@@ -171,6 +206,7 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-contrib-copy');
     grunt.loadNpmTasks('grunt-contrib-jshint');
     grunt.registerTask('default', ['concat:dist', 'uglify:dist', 'copy:test']);
+    grunt.registerTask('xjxy', ['concat:xjxy', 'uglify:xjxy']);
     grunt.registerTask('datapage', ['concat:datapage', 'uglify:datapage']);
     grunt.registerTask('datepicker', ['concat:datepicker', 'uglify:datepicker']);
     grunt.registerTask('jshintc', ['jshint']);

@@ -1,4 +1,4 @@
-/*! LibraryJS - v0.0.1 - 2019-07-14 */
+/*! LibraryJS - v0.0.1 - 2019-12-02 */
 /*! https://github.com/hardimplistic */
 'use strict';
 
