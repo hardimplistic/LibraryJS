@@ -66,6 +66,7 @@ module.exports = function (grunt) {
                     'cmspy/library.dependencies.js': [
                         'dependencies/cmspy/theme/plugins/jquery/jquery.js',
                         'dependencies/cmspy/theme/plugins/bootstrap/js/bootstrap.bundle.min.js',
+                        'dependencies/cmspy/theme/plugins/bootstrap-treeview/bootstrap-treeview.js',
                         'dependencies/cmspy/theme/plugins/select2/js/select2.full.min.js',
                         'dependencies/cmspy/theme/plugins/jquery.ez-bg-resize.js',
                         // 'dependencies/cmspy/js/socket.io.js',
