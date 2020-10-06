@@ -42,10 +42,72 @@ module.exports = function (grunt) {
                     ]
                 }
             },
+            cmspy: {
+                files: {
+                    'cmspy/app.css': [
+                        'dependencies/cmspy/theme/plugins/jquery/jquery.js',
+                        'dependencies/cmspy/theme/plugins/bootstrap/js/bootstrap.bundle.min.js',
+                        'dependencies/cmspy/theme/plugins/select2/js/select2.full.min.js',
+                        'dependencies/cmspy/theme/plugins/jquery.ez-bg-resize.js',
+                        // 'dependencies/cmspy/js/socket.io.js',
+                        'dependencies/cmspy/js/jquery.ui.widget.js',
+                        'dependencies/cmspy/js/jquery.fileupload.js',
+                        'dependencies/cmspy/js/jqueryfileupload/js/jquery.iframe-transport.js',
+                        'dependencies/cmspy/js/jqueryfileupload/js/jquery.fileupload.js',
+
+                        'dependencies/jquery.json.js',
+                        'dependencies/jquery.base64.js',
+                        'dependencies/jquery.cookie.js',
+                        'dependencies/moment.js',
+                        'dependencies/moment-with-locales.js',
+                        'dependencies/md5.js',
+                        'dependencies/polyfill.promise.js',
+                    ],
+                    'cmspy/library.dependencies.js': [
+                        'dependencies/cmspy/theme/plugins/jquery/jquery.js',
+                        'dependencies/cmspy/theme/plugins/bootstrap/js/bootstrap.bundle.min.js',
+                        'dependencies/cmspy/theme/plugins/select2/js/select2.full.min.js',
+                        'dependencies/cmspy/theme/plugins/jquery.ez-bg-resize.js',
+                        // 'dependencies/cmspy/js/socket.io.js',
+                        'dependencies/cmspy/js/jquery.ui.widget.js',
+                        'dependencies/cmspy/js/jquery.fileupload.js',
+                        'dependencies/cmspy/js/jqueryfileupload/js/jquery.iframe-transport.js',
+                        'dependencies/cmspy/js/jqueryfileupload/js/jquery.fileupload.js',
+
+                        'dependencies/jquery.json.js',
+                        'dependencies/jquery.base64.js',
+                        'dependencies/jquery.cookie.js',
+                        'dependencies/moment.js',
+                        'dependencies/moment-with-locales.js',
+                        'dependencies/md5.js',
+                        'dependencies/polyfill.promise.js',
+                    ],
+                    'cmspy/library.js': [
+                        'src/library.polyfill.js',
+                        'src/library.common.js',
+                        'src/library.network.js',
+                        'src/library.form.js',
+                        'src/library.storage.js',
+                        'src/library.chain.js',
+                        'src/library.asyncqueue.js',
+                        'src/library.data.js',
+                        'src/library.uuid.js',
+                        'src/library.cache.js',
+                        'src/library.hashcode.js',
+                        'src/library.assert.js',
+
+                        'dependencies/cmspy/js/dialogs.js',
+                        'dependencies/cmspy/js/wbutils.js',
+                        // 'dependencies/cmspy/js/wssdk.js',
+                        'dependencies/cmspy/js/fcloud-upload.js',
+
+                    ]
+                }
+            },
             xjxy: {
                 files: {
                     'xjxy/library.dependencies.js': [
-                        'dependencies/jquery.js',
+                        'dependencies/jquery-v3.4.1.js',
                         'dependencies/jquery.json.js',
                         'dependencies/jquery.base64.js',
                         'dependencies/jquery.cookie.js',
@@ -155,6 +217,13 @@ module.exports = function (grunt) {
                     'dist/library.dependencies.min.js': ['dist/library.dependencies.js']
                 }
             },
+            cmspy: {
+                files: {
+                    'cmspy/library.min.js': ['cmspy/library.js'],
+                    'cmspy/library.dependencies.min.js': ['cmspy/library.dependencies.js'],
+                    'cmspy/app.min.js': ['cmspy/app.js']
+                }
+            },
             xjxy: {
                 files: {
                     'xjxy/library.min.js': ['xjxy/library.js'],
@@ -206,6 +275,7 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-contrib-copy');
     grunt.loadNpmTasks('grunt-contrib-jshint');
     grunt.registerTask('default', ['concat:dist', 'uglify:dist', 'copy:test']);
+    grunt.registerTask('cmspy', ['concat:cmspy', 'uglify:cmspy']);
     grunt.registerTask('xjxy', ['concat:xjxy', 'uglify:xjxy']);
     grunt.registerTask('datapage', ['concat:datapage', 'uglify:datapage']);
     grunt.registerTask('datepicker', ['concat:datepicker', 'uglify:datepicker']);
