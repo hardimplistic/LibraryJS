@@ -195,3 +195,18 @@ function arrayObjectToMapByColumn(arrObj, column) {
     }
     return map;
 }
+
+// 查找集合中所有对象指定属性，找到并返回对象
+// param arrObj 集合
+// param column string 字段名称
+// param value 目标值
+function arrayObjectSearchByColumn(arrObj, column, value) {
+    var obj = null;
+    for (var i in arrObj) {
+        if (arrObj[i][column] == value) {
+            obj = arrObj[i];
+            break;
+        }
+    }
+    return obj;
+}

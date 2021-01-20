@@ -7,6 +7,10 @@ function convertEmptyToNull(str) {
     return isNull(str) ? null : str;
 }
 
+function convertNullToEmpty(str) {
+    return isNull(str) ? '' : str;
+}
+
 /**
  * @return {string}
  */
