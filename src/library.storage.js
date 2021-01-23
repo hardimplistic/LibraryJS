@@ -1,6 +1,11 @@
 
 var WStorage = {
+    baseKey: null,
     setItem: function(key, valueObject) {
+        if (!WStorage.baseKey) {
+            WStorage.baseKey = javaHashCode(location.hostname).toString(36);
+        }
+        key = WStorage.baseKey.concat('_').concat(key);
         var type = $.type(valueObject);
         switch (type) {
             case 'object':
@@ -14,6 +19,10 @@ var WStorage = {
         }
     },
     getItem: function(key) {
+        if (!WStorage.baseKey) {
+            WStorage.baseKey = javaHashCode(location.hostname).toString(36);
+        }
+        key = WStorage.baseKey.concat('_').concat(key);
         var type = localStorage.getItem('_type_' + key);
         var valueObject = localStorage.getItem(key);
         switch (type) {
@@ -25,6 +34,10 @@ var WStorage = {
         }
     },
     removeItem: function(key) {
+        if (!WStorage.baseKey) {
+            WStorage.baseKey = javaHashCode(location.hostname).toString(36);
+        }
+        key = WStorage.baseKey.concat('_').concat(key);
         localStorage.removeItem('_type_' + key);
         localStorage.removeItem(key)
     },
